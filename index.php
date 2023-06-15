@@ -14,26 +14,38 @@ if (isset($_POST['import'])) {
             $sheet = $reader->load($_FILES['file']['tmp_name']);
             $worksheet = $sheet->getActiveSheet();
             $sheetArr = $worksheet->toArray();
-            // $params = [];
-            // $sql  = "UPDATE PBB.DAT_OP_BUMI SET JNS_BUMI = 4 WHERE 
-            //         KD_PROPINSI = :kd_prop AND
-            //         KD_DATI2 = :kd_dati2 AND
-            //         KD_KECAMATAN = :kd_kec AND
-            //         KD_KELURAHAN = :kd_kel AND
-            //         KD_BLOK = :kd_blok AND
-            //         NO_URUT = :no_urut AND
-            //         KD_JNS_OP = :kd_jns_op";
-            // foreach ($sheetArr as $row) {
-            //     $params[] = [
-            //         'kd_prop' => $row[0],
-            //         'kd_dati2' => $row[1],
-            //         'kd_kec' => $row[2],
-            //         'kd_kel' => $row[3],
-            //         'kd_blok' => $row[4],
-            //         'no_urut' => $row[5],
-            //         'kd_jns_op' => $row[6]
-            //     ];
-            // }
+            $params = [];
+            $sql  = "UPDATE PBB.DAT_OP_BUMI SET JNS_BUMI = 4 WHERE 
+                    KD_PROPINSI = :kd_prop AND
+                    KD_DATI2 = :kd_dati2 AND
+                    KD_KECAMATAN = :kd_kec AND
+                    KD_KELURAHAN = :kd_kel AND
+                    KD_BLOK = :kd_blok AND
+                    NO_URUT = :no_urut AND
+                    KD_JNS_OP = :kd_jns_op";
+            foreach ($sheetArr as $row) {
+                $params[] = [
+                    'kd_prop' => $row[0],
+                    'kd_dati2' => $row[1],
+                    'kd_kec' => $row[2],
+                    'kd_kel' => $row[3],
+                    'kd_blok' => $row[4],
+                    'no_urut' => $row[5],
+                    'kd_jns_op' => $row[6]
+                ];
+            }
+
+            $db->beginTransaction();
+
+            try {
+                $stmt = $db->prepare($sql);
+                $stmt->Execute($params);
+            } catch (Exception $e) {
+                $db->rollBack();
+                die($e->getMessage());
+            }
+
+            $db->commit();
 
             // print_r($params);
             // die;
