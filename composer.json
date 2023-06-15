@@ -1,0 +1,14 @@
+{
+  "name": "gilang/import-fasum",
+  "description": "Import data fasum pbb lutim",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Gilang Anugrah",
+      "email": "98817165+gilang2912@users.noreply.github.com"
+    }
+  ],
+  "require": {
+    "phpoffice/phpspreadsheet": "^1.28"
+  }
+}
